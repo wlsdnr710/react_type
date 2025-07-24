@@ -15,12 +15,13 @@ const Typing = () => {
         switch (event.key) {
           case "Escape":
             setKeyPressed("");
+            setWordCount(0);
             break;
           case "Enter":
             setKeyPressed((prev) => prev + "\n");
             break;
           case "Backspace":
-            if (keyPressed[-1] === " ") {
+            if (keyPressed.slice(-1) === " ") {
               setWordCount((prev) => prev - 1);
             }
             setKeyPressed((prev) => prev.slice(0, -1));
@@ -39,9 +40,10 @@ const Typing = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [keyPressed]);
 
-  console.log(wordCount);
+  console.log(keyPressed)
+  // console.log(wordCount);
   return (
     <div>
       <ContentsDisplay currentWord={wordCount} />
