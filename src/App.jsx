@@ -6,14 +6,14 @@ import Logo from "./assets/Logo.jsx";
 function App() {
   //TODO: Create module later that will change themeColor with these
   const [themeColor, setThemeColor] = useState("#000000");
-  const colors = [
-    "#3498db",
-    "#2ecc71",
-    "#e74c3c",
-    "#f39c12",
-    "#9b59b6",
-    "#1abc9c",
-  ];
+  // const colors = [
+  //   "#3498db",
+  //   "#2ecc71",
+  //   "#e74c3c",
+  //   "#f39c12",
+  //   "#9b59b6",
+  //   "#1abc9c",
+  // ];
 
   return (
     <>

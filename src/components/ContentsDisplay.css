@@ -1,0 +1,15 @@
+.contentDisplay{
+  display: block;
+  width: 80vw;
+  height: 30vh;
+  border-color:black;
+}
+
+.word {
+  display: inline-block;
+  font-size:large;
+}
+
+.current {
+  background-color: lightblue;
+}
