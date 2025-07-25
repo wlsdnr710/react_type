@@ -3,14 +3,14 @@ const Logo = ({ themeColor }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
       fill={themeColor}
       height="4rem"
       width="4rem"
       version="1.1"
       id="Layer_1"
       viewBox="0 0 481.882 481.882"
-      xml:space="preserve"
+      xmlSpace="preserve"
     >
       <g>
         <g>

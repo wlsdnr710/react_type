@@ -8,6 +8,7 @@ import ContentsDisplay from "./ContentsDisplay";
 const Typing = () => {
   const [keyPressed, setKeyPressed] = useState("");
   const [wordCount, setWordCount] = useState(0);
+  const [letterCount, setLetterCount] = useState(0);
   // const [hangulBuffer, setHangulBuffer] = useState([]);
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -15,14 +16,20 @@ const Typing = () => {
         switch (event.key) {
           case "Escape":
             setKeyPressed("");
+            setLetterCount(0);
             setWordCount(0);
             break;
           case "Enter":
+            // TODO: Multiple sentence -> skip to next sentence. 
             setKeyPressed((prev) => prev + "\n");
             break;
           case "Backspace":
             if (keyPressed.slice(-1) === " ") {
               setWordCount((prev) => prev - 1);
+              setLetterCount(keyPressed.split(" ")[wordCount-1].length)
+            }
+            if (letterCount) {
+              setLetterCount((prev) => prev - 1);
             }
             setKeyPressed((prev) => prev.slice(0, -1));
             break;
@@ -30,8 +37,10 @@ const Typing = () => {
         }
         return;
       }
+      setLetterCount((prev) => prev + 1);
       if (event.key == " ") {
         setWordCount((prev) => prev + 1);
+        setLetterCount(0);
       }
       setKeyPressed((prev) => prev + event.key);
     };
@@ -42,11 +51,15 @@ const Typing = () => {
     };
   }, [keyPressed]);
 
-  console.log(keyPressed)
-  // console.log(wordCount);
+  const typedWords = keyPressed.split(" ");
+
   return (
     <div>
-      <ContentsDisplay currentWord={wordCount} />
+      <ContentsDisplay
+        currentWord={wordCount}
+        currentLetter={letterCount}
+        typedWords={typedWords}
+      />
       <p>{keyPressed}</p>
     </div>
   );

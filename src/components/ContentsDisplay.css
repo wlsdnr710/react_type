@@ -10,6 +10,15 @@
   font-size:large;
 }
 
-.current {
+.currentWord {
   background-color: lightblue;
+}
+
+
+.letter.correct {
+  color: blue;
+}
+
+.letter.incorrect {
+  color: red;
 }
