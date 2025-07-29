@@ -1,10 +1,10 @@
 import { temporaryText } from "./temporaryText";
 import "./ContentsDisplay.css";
+import { isHangulChar } from "./translateHangul";
+import { disassemble } from "es-hangul";
 
 // 타이핑을 할 내용 (문장, 단어들등) 을 보여주는 컴포넌트.
 // TODO: 문장 여러개 추가하기 (temporaryText 대체)
-// TODO: 입력된 문자(Typing)랑 비교해서 오타 표시기능 구현하기.
-
 // Very far goal : Make backend/DB that lets people upload/select things to type.
 const ContentsDisplay = ({ currentWord, currentLetter, typedWords }) => {
   let words = temporaryText.split(" ");
@@ -22,7 +22,24 @@ const ContentsDisplay = ({ currentWord, currentLetter, typedWords }) => {
               wordIndex < currentWord ||
               (wordIndex == currentWord && letterIndex < currentLetter)
             ) {
-              if (letter === typedWords[wordIndex][letterIndex]) {
+              //한글 비교
+              if (isHangulChar(letter)) {
+                const typeDisassembled = disassemble(
+                  typedWords[wordIndex][letterIndex]
+                );
+                const sampleDisassembled = disassemble(
+                  letter + word[letterIndex + 1]
+                );
+                if (
+                  sampleDisassembled.substring(0, typeDisassembled.length) ==
+                  typeDisassembled
+                ) {
+                  letterClass += " correct";
+                } else {
+                  letterClass += " incorrect";
+                }
+                // 한글 외에 다른 문자들교비교
+              } else if (letter === typedWords[wordIndex][letterIndex]) {
                 letterClass += " correct";
               } else {
                 letterClass += " incorrect";

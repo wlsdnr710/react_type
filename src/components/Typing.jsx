@@ -53,7 +53,9 @@ const Typing = () => {
                 setHangulDelete(false);
                 setLetterCount((prev) => prev - 1);
               }
-            } else {
+            }
+            // 한 글자 한번에 지우기
+            else {
               setKeyPressed((prev) => prev.slice(0, -1));
               if (letterCount) {
                 setLetterCount((prev) => prev - 1);
@@ -70,7 +72,6 @@ const Typing = () => {
           // 한/영 - 한글/영어 입력모드 전환
           // eslint-disable-next-line no-fallthrough
           case "HangulMode":
-            console.log("한/영");
             setIsHangul((prev) => !prev);
             break;
           default:
@@ -111,9 +112,9 @@ const Typing = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [keyPressed, isHangul, letterCount, wordCount]);
+  }, [keyPressed, isHangul, letterCount, wordCount, hangulDelete]);
 
-  console.log(wordCount, letterCount);
+  // console.log(wordCount, letterCount);
   // console.log(keyPressed);
   const typedWords = keyPressed.split(" ");
 
