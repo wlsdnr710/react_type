@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ContentsDisplay from "./ContentsDisplay";
 import { translateHangul, isHangulChar } from "./translateHangul";
-import { assemble } from "es-hangul";
+import { assemble, removeLastCharacter } from "es-hangul";
 
 // 유저가 타이핑 한 내용을 처리하는 컴포넌트 (개발에 따라 컴포넌트화 하지 않고 아예 안보이게 할 수도 있음.)
 // TODO : 한글 처리 방법 생각하기 (Toss 한글 라이브러리 찾아보고 활용방법 생각하기)
@@ -12,34 +12,62 @@ const Typing = () => {
   const [wordCount, setWordCount] = useState(0);
   const [letterCount, setLetterCount] = useState(0);
   const [isHangul, setIsHangul] = useState(false);
+  const [hangulDelete, setHangulDelete] = useState(false);
   // const [hangulBuffer, setHangulBuffer] = useState([]);
+
+  /**
+   * 키보드 인풋 처리
+   */
   useEffect(() => {
     const handleKeyDown = (event) => {
+      // 특수키
       if (event.key.length > 1) {
         switch (event.key) {
+          //ESC 키 - 입력하던 문장 초기화
           case "Escape":
             setKeyPressed("");
             setLetterCount(0);
             setWordCount(0);
             break;
+          //Enter 키 - 나중에 기능 추가 (다음 문장으로) (TODO)
           case "Enter":
-            // TODO: Multiple sentence -> skip to next sentence.
             setKeyPressed((prev) => prev + "\n");
             break;
+          //Backspace 키 - 이전 문자 지우기
           case "Backspace":
+            // 스페이스 지울경우 (현재 단어의 길이 -> 이전 단어 길이로 초기화)
             if (keyPressed.slice(-1) === " ") {
               setWordCount((prev) => prev - 1);
               setLetterCount(keyPressed.split(" ")[wordCount - 1].length);
+              setKeyPressed((prev) => prev.slice(0, -1));
+              if (hangulDelete) {
+                setHangulDelete(false);
+              }
             }
-            if (letterCount) {
-              setLetterCount((prev) => prev - 1);
+            // 한글의 현재 문자를 지울경우 (자모음 하나씩 삭제)
+            else if (hangulDelete) {
+              const lengthReduced =
+                keyPressed.length == removeLastCharacter(keyPressed).length;
+              setKeyPressed((prev) => removeLastCharacter(prev));
+              if (!lengthReduced) {
+                setHangulDelete(false);
+                setLetterCount((prev) => prev - 1);
+              }
+            } else {
+              setKeyPressed((prev) => prev.slice(0, -1));
+              if (letterCount) {
+                setLetterCount((prev) => prev - 1);
+              }
             }
-            setKeyPressed((prev) => prev.slice(0, -1));
             break;
+
+          // 한/영 키
           case "Alt":
             if (event.code == "AltLeft") {
+              //왼쪽 Alt는 아무 기능 아니므로 무시
               break;
             }
+          // 한/영 - 한글/영어 입력모드 전환
           // eslint-disable-next-line no-fallthrough
           case "HangulMode":
             console.log("한/영");
@@ -49,13 +77,15 @@ const Typing = () => {
         }
         return;
       }
-      if (event.key == " ") {
+      // 스페이스 바
+      else if (event.key == " ") {
         setWordCount((prev) => prev + 1);
         setLetterCount(0);
         setKeyPressed((prev) => prev + event.key);
-      } else if (isHangul) {
-        // 한글 입력중
-        //TODO : 한글 조합 기능 넣기.
+      }
+      // 한글 입력 처리
+      else if (isHangul) {
+        setHangulDelete(true);
         const currentHangulInput = translateHangul(event.key, event.shiftKey);
         const lastChar = keyPressed[keyPressed.length - 1];
         if (
@@ -69,8 +99,9 @@ const Typing = () => {
           setKeyPressed((prev) => prev + currentHangulInput);
           setLetterCount((prev) => prev + 1);
         }
-      } else {
-        // 영어 입력중
+      }
+      // 영어 입력 처리
+      else {
         setKeyPressed((prev) => prev + event.key);
         setLetterCount((prev) => prev + 1);
       }
@@ -82,7 +113,7 @@ const Typing = () => {
     };
   }, [keyPressed, isHangul, letterCount, wordCount]);
 
-  // console.log(wordCount, letterCount);
+  console.log(wordCount, letterCount);
   // console.log(keyPressed);
   const typedWords = keyPressed.split(" ");
 
