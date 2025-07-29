@@ -13,8 +13,21 @@ const Typing = () => {
   const [letterCount, setLetterCount] = useState(0);
   const [isHangul, setIsHangul] = useState(false);
   const [hangulDelete, setHangulDelete] = useState(false);
+  const [currentSentence, setCurrentSentence] = useState(
+    Math.floor(Math.random() * 20)
+  );
   // const [hangulBuffer, setHangulBuffer] = useState([]);
 
+  function handleFinishedSentence() {
+    setCurrentSentence(Math.floor(Math.random() * 20));
+    resetTyping();
+  }
+
+  function resetTyping() {
+    setKeyPressed("");
+    setLetterCount(0);
+    setWordCount(0);
+  }
   /**
    * 키보드 인풋 처리
    */
@@ -25,13 +38,12 @@ const Typing = () => {
         switch (event.key) {
           //ESC 키 - 입력하던 문장 초기화
           case "Escape":
-            setKeyPressed("");
-            setLetterCount(0);
-            setWordCount(0);
+            resetTyping();
             break;
           //Enter 키 - 나중에 기능 추가 (다음 문장으로) (TODO)
           case "Enter":
-            setKeyPressed((prev) => prev + "\n");
+            setCurrentSentence((prev) => (prev + 1) % 20);
+            resetTyping();
             break;
           //Backspace 키 - 이전 문자 지우기
           case "Backspace":
@@ -122,9 +134,11 @@ const Typing = () => {
     <div>
       {isHangul && <p>한글입력중</p>}
       <ContentsDisplay
+        currentSentence={currentSentence}
         currentWord={wordCount}
         currentLetter={letterCount}
         typedWords={typedWords}
+        handleFinishedSentence={handleFinishedSentence}
       />
       <p>{keyPressed}</p>
     </div>
