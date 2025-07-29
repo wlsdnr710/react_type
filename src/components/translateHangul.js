@@ -2,7 +2,7 @@ const alphaToHangul = {
   q: "ㅂ",
   w: "ㅈ",
   e: "ㄷ",
-  r: "ㄹ",
+  r: "ㄱ",
   t: "ㅅ",
   y: "ㅛ",
   u: "ㅕ",
@@ -56,7 +56,10 @@ const shiftHangul = {
   ㅡ: "ㅡ",
 };
 
-export default function translateHangul(character, shiftKey) {
+const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+
+
+export function translateHangul(character, shiftKey) {
   const lowerChar = character.toLowerCase();
   let resultChar = character;
   if (lowerChar in alphaToHangul) {
@@ -69,3 +72,9 @@ export default function translateHangul(character, shiftKey) {
   }
   return resultChar;
 }
+
+export function isHangulChar(string) {
+  return korean.test(string);
+}
+
+
