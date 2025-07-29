@@ -22,6 +22,7 @@ function App() {
         <h2>React Type</h2>
       </div>
       <Typing />
+      <textarea name="" id=""></textarea>
     </>
   );
 }
