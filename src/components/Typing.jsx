@@ -14,9 +14,6 @@ const Typing = () => {
   // const [hangulBuffer, setHangulBuffer] = useState([]);
   useEffect(() => {
     const handleKeyDown = (event) => {
-      // console.log(event.code + " " + event.shiftKey);
-      // console.log(event.key);
-      // console.log(event.code);
       if (event.key.length > 1) {
         switch (event.key) {
           case "Escape":
@@ -55,6 +52,7 @@ const Typing = () => {
       if (event.key == " ") {
         setWordCount((prev) => prev + 1);
         setLetterCount(0);
+        setKeyPressed((prev) => prev + event.key);
       } else if (isHangul) {  // 한글 입력중
         //TODO : 한글 조합 기능 넣기.
         setKeyPressed(
