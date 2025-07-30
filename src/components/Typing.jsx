@@ -56,9 +56,17 @@ const Typing = () => {
             break;
           //Backspace 키 - 이전 문자 지우기
           case "Backspace":
+            // 마지막 문자 or Space 지울 경우 타이핑 상태 false로 전환
+            if (
+              (!wordCount && letterCount == 1) ||
+              (!letterCount && wordCount == 1)
+            ) {
+              setIsTyping(false);
+            }
             // 스페이스 지울경우 (현재 단어의 길이 -> 이전 단어 길이로 초기화)
             if (keyPressed.slice(-1) === " ") {
               setWordCount((prev) => prev - 1);
+              setCumulativeWordCount((prev) => prev - 1);
               setLetterCount(keyPressed.split(" ")[wordCount - 1].length);
               setKeyPressed((prev) => prev.slice(0, -1));
               if (hangulDelete) {
@@ -80,8 +88,6 @@ const Typing = () => {
               if (letterCount) {
                 setKeyPressed((prev) => prev.slice(0, -1));
                 setLetterCount((prev) => prev - 1);
-              } else {
-                setIsTyping(false);
               }
             }
             break;
@@ -103,7 +109,7 @@ const Typing = () => {
       }
       // 스페이스 바
       else if (event.key == " ") {
-        !isTyping && setIsTyping((prev) => !prev);
+        !isTyping && setIsTyping(true);
         setWordCount((prev) => prev + 1);
         setCumulativeKeyCount((prev) => prev + 1);
         setCumulativeWordCount((prev) => prev + 1);
@@ -112,7 +118,7 @@ const Typing = () => {
       }
       // 한글 입력 처리
       else if (isHangul) {
-        !isTyping && setIsTyping((prev) => !prev);
+        !isTyping && setIsTyping(true);
         setHangulDelete(true);
         const currentHangulInput = translateHangul(event.key, event.shiftKey);
         const lastChar = keyPressed[keyPressed.length - 1];
@@ -131,7 +137,7 @@ const Typing = () => {
       }
       // 영어 입력 처리
       else {
-        !isTyping && setIsTyping((prev) => !prev);
+        !isTyping && setIsTyping(true);
         setKeyPressed((prev) => prev + event.key);
         setCumulativeKeyCount((prev) => prev + 1);
         setLetterCount((prev) => prev + 1);
