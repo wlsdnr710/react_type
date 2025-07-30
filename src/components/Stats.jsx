@@ -9,10 +9,16 @@ const Stats = ({ accuracy, isTyping, keyCount, wordCount }) => {
   useEffect(() => {
     if (!isTyping) {
       setLastSession((prev) => prev + time);
+      if (!wordCount && !keyCount) {
+        setLastSession(0);
+      }
       setTime(0);
       setStartTime(new Date());
     } else {
-      if(!time) {
+      if (!wordCount && !keyCount) {
+        setLastSession(0);
+      }
+      if (!time) {
         setStartTime(new Date());
       }
       const timer = setInterval(() => {
@@ -27,12 +33,21 @@ const Stats = ({ accuracy, isTyping, keyCount, wordCount }) => {
 
   return (
     <p>
-      <span className="stat">CPM: {Math.round(keyCount/((time+lastSession)/600000))/10}</span>
       <span className="stat">
-        WPM: {Math.round(wordCount / ((time + lastSession) / 600000))/10}
+        CPM:{" "}
+        {keyCount &&
+          Math.round(keyCount / ((time + lastSession) / 600000)) / 10}
+      </span>
+      <span className="stat">
+        WPM:{" "}
+        {wordCount &&
+          Math.round(wordCount / ((time + lastSession) / 600000)) / 10}
       </span>
       <span className="stat">Accuracy: {accuracy}</span>
-      <span className="stat">Timer : {time}/{lastSession}</span>
+      {/* Just for Reference : Will delete timer later */}
+      <span className="stat">   
+        Timer : {time}/{lastSession}    
+      </span>
     </p>
   );
 };
