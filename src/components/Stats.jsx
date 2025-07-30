@@ -7,14 +7,21 @@ const Stats = ({ accuracy, isTyping, keyCount, wordCount }) => {
   const [time, setTime] = useState(0);
 
   useEffect(() => {
+    // not typing - pause timer
+    // update startTime to check starting time (현재 시간과 시작시간의 차로 계산)
+    // Pause 된 경우 이전 세션 duration 과 합산해서 계산하기 위해 계산.
     if (!isTyping) {
       setLastSession((prev) => prev + time);
+      // ESC눌러서 초기화 된 경우.
       if (!wordCount && !keyCount) {
         setLastSession(0);
       }
       setTime(0);
       setStartTime(new Date());
-    } else {
+    }
+    // 타이핑 도중 : 지속 시간 업데이트.
+    else {
+      // ESC눌러서 초기화 된 경우.
       if (!wordCount && !keyCount) {
         setLastSession(0);
       }
@@ -45,8 +52,8 @@ const Stats = ({ accuracy, isTyping, keyCount, wordCount }) => {
       </span>
       <span className="stat">Accuracy: {accuracy}</span>
       {/* Just for Reference : Will delete timer later */}
-      <span className="stat">   
-        Timer : {time}/{lastSession}    
+      <span className="stat">
+        Timer : {time}/{lastSession}
       </span>
     </p>
   );
