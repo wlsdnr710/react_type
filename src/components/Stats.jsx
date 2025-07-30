@@ -36,7 +36,7 @@ const Stats = ({ accuracy, isTyping, keyCount, wordCount }) => {
         clearInterval(timer);
       };
     }
-  }, [isTyping, time]);
+  }, [isTyping, time, keyCount]);
 
   return (
     <p>

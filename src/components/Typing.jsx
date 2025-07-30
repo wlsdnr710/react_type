@@ -39,7 +39,6 @@ const Typing = () => {
    */
   useEffect(() => {
     const handleKeyDown = (event) => {
-      !isTyping && setIsTyping((prev) => !prev);
       // 특수키
       if (event.key.length > 1) {
         switch (event.key) {
@@ -104,6 +103,7 @@ const Typing = () => {
       }
       // 스페이스 바
       else if (event.key == " ") {
+        !isTyping && setIsTyping((prev) => !prev);
         setWordCount((prev) => prev + 1);
         setCumulativeKeyCount((prev) => prev + 1);
         setCumulativeWordCount((prev) => prev + 1);
@@ -112,6 +112,7 @@ const Typing = () => {
       }
       // 한글 입력 처리
       else if (isHangul) {
+        !isTyping && setIsTyping((prev) => !prev);
         setHangulDelete(true);
         const currentHangulInput = translateHangul(event.key, event.shiftKey);
         const lastChar = keyPressed[keyPressed.length - 1];
@@ -130,6 +131,7 @@ const Typing = () => {
       }
       // 영어 입력 처리
       else {
+        !isTyping && setIsTyping((prev) => !prev);
         setKeyPressed((prev) => prev + event.key);
         setCumulativeKeyCount((prev) => prev + 1);
         setLetterCount((prev) => prev + 1);
