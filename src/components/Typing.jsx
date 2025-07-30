@@ -3,6 +3,7 @@ import ContentsDisplay from "./ContentsDisplay";
 import "./Typing.css";
 import { translateHangul, isHangulChar } from "./translateHangul";
 import { assemble, removeLastCharacter } from "es-hangul";
+import Stats from "./Stats";
 
 // 유저가 타이핑 한 내용을 처리하는 컴포넌트 (개발에 따라 컴포넌트화 하지 않고 아예 안보이게 할 수도 있음.)
 // TODO : 한글 처리 방법 생각하기 (Toss 한글 라이브러리 찾아보고 활용방법 생각하기)
@@ -12,8 +13,11 @@ const Typing = () => {
   const [keyPressed, setKeyPressed] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [letterCount, setLetterCount] = useState(0);
+  const [cumulativeWordCount, setCumulativeWordCount] = useState(0);
+  const [cumulativeKeyCount, setCumulativeKeyCount] = useState(0);
   const [isHangul, setIsHangul] = useState(false);
   const [hangulDelete, setHangulDelete] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const [currentSentence, setCurrentSentence] = useState(
     Math.floor(Math.random() * 20)
   );
@@ -28,18 +32,23 @@ const Typing = () => {
     setKeyPressed("");
     setLetterCount(0);
     setWordCount(0);
+    setIsTyping(false);
   }
   /**
    * 키보드 인풋 처리
    */
   useEffect(() => {
     const handleKeyDown = (event) => {
+      !isTyping && setIsTyping((prev) => !prev);
       // 특수키
       if (event.key.length > 1) {
         switch (event.key) {
           //ESC 키 - 입력하던 문장 초기화
           case "Escape":
             resetTyping();
+            // Reset Everything (cumulative as well )
+            setCumulativeKeyCount(0);
+            setCumulativeWordCount(0);
             break;
           //Enter 키 - 나중에 기능 추가 (다음 문장으로) (TODO)
           case "Enter":
@@ -69,9 +78,11 @@ const Typing = () => {
             }
             // 한 글자 한번에 지우기
             else {
-              setKeyPressed((prev) => prev.slice(0, -1));
               if (letterCount) {
+                setKeyPressed((prev) => prev.slice(0, -1));
                 setLetterCount((prev) => prev - 1);
+              } else {
+                setIsTyping(false);
               }
             }
             break;
@@ -94,6 +105,8 @@ const Typing = () => {
       // 스페이스 바
       else if (event.key == " ") {
         setWordCount((prev) => prev + 1);
+        setCumulativeKeyCount((prev) => prev + 1);
+        setCumulativeWordCount((prev) => prev + 1);
         setLetterCount(0);
         setKeyPressed((prev) => prev + event.key);
       }
@@ -113,10 +126,12 @@ const Typing = () => {
           setKeyPressed((prev) => prev + currentHangulInput);
           setLetterCount((prev) => prev + 1);
         }
+        setCumulativeKeyCount((prev) => prev + 1);
       }
       // 영어 입력 처리
       else {
         setKeyPressed((prev) => prev + event.key);
+        setCumulativeKeyCount((prev) => prev + 1);
         setLetterCount((prev) => prev + 1);
       }
     };
@@ -125,7 +140,7 @@ const Typing = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [keyPressed, isHangul, letterCount, wordCount, hangulDelete]);
+  }, [keyPressed, isHangul, letterCount, wordCount, hangulDelete, isTyping]);
 
   // console.log(wordCount, letterCount);
   // console.log(keyPressed);
@@ -134,6 +149,12 @@ const Typing = () => {
   return (
     <div>
       {isHangul && <p className="language">한글입력중</p>}
+      <Stats
+        accuracy={100}
+        isTyping={isTyping}
+        keyCount={cumulativeKeyCount}
+        wordCount={cumulativeWordCount}
+      />
       <ContentsDisplay
         currentSentence={currentSentence}
         currentWord={wordCount}
