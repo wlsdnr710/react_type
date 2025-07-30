@@ -1,7 +1,7 @@
-const Logo = ({ themeColor }) => {
+const Logo = ({ themeColor, onClick }) => {
   // source : https://www.svgrepo.com/svg/260037/keyboard
   return (
-    <svg
+    <svg onClick={onClick}
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       fill={themeColor}

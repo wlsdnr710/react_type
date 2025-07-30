@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ContentsDisplay from "./ContentsDisplay";
+import "./Typing.css";
 import { translateHangul, isHangulChar } from "./translateHangul";
 import { assemble, removeLastCharacter } from "es-hangul";
 
@@ -132,7 +133,7 @@ const Typing = () => {
 
   return (
     <div>
-      {isHangul && <p>한글입력중</p>}
+      {isHangul && <p className="language">한글입력중</p>}
       <ContentsDisplay
         currentSentence={currentSentence}
         currentWord={wordCount}
@@ -140,7 +141,7 @@ const Typing = () => {
         typedWords={typedWords}
         handleFinishedSentence={handleFinishedSentence}
       />
-      <p>{keyPressed}</p>
+      <p className="typed">{keyPressed}</p>
     </div>
   );
 };
