@@ -1,11 +1,6 @@
 .contentDisplay{
   display: block;
-  width: 80vw;
-  height: 30vh;
   border-color:black;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
 }
 
 .word {
