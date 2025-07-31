@@ -54,8 +54,8 @@ const Stats = ({ isTyping, keyCount, wordCount, typoCount }) => {
         Accuracy:{" "}
         {`${
           keyCount
-            ? (Math.round(((keyCount - typoCount) / keyCount) * 1000) / 10).toFixed(1)
-            : 100.0
+            ? (Math.round(((keyCount - typoCount) / keyCount) * 10000) / 100).toFixed(1)
+            : "100.0"
         }%`}
       </span>
       {/* Just for Reference : Will delete timer later */}

@@ -29,9 +29,10 @@ const Typing = () => {
     resetTyping();
   }
 
-  function handleTypo(num) {
-    setTypo(num);
+  function handleTypo() {
+    setTypo((prev)=>prev+1);
   }
+
 
   function resetTyping() {
     setKeyPressed("");
@@ -165,7 +166,6 @@ const Typing = () => {
     <div>
       {isHangul && <p className="language">한글입력중</p>}
       <Stats
-        accuracy={100}
         isTyping={isTyping}
         keyCount={cumulativeKeyCount}
         wordCount={cumulativeWordCount}

@@ -2,12 +2,13 @@ import { getSampleText } from "./temporaryText";
 import "./ContentsDisplay.css";
 import { isHangulChar } from "./translateHangul";
 import { disassemble } from "es-hangul";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 // 타이핑을 할 내용 (문장, 단어들등) 을 보여주는 컴포넌트.
 // TODO: 문장 여러개 추가하기 (temporaryText 대체)
-// TODO: 오타 표시 방법 생각해보기
 // Very far goal : Make backend/DB that lets people upload/select things to type.
+
+// Escape (지울때) 오타를 지우는지 여부 체크. 
 const ContentsDisplay = ({
   currentSentence,
   currentWord,
@@ -15,9 +16,7 @@ const ContentsDisplay = ({
   typedWords,
   handleFinishedSentence,
   handleTypo,
-  // handleTypoEdit, 
 }) => {
-  const [typo, setTypo] = useState(0);
 
   function isCorrect(displayedWord, typedWord, isHangul) {
     //한글 비교
@@ -43,21 +42,20 @@ const ContentsDisplay = ({
   let words = getSampleText(currentSentence).split(" ");
 
   useEffect(() => {
-    if (words&& words[currentWord]) {
-      const displayCurrentChar = words[currentWord][currentLetter-1];
+    if (words && words[currentWord]) {
+      const displayCurrentChar = words[currentWord][currentLetter - 1];
       const displayNextChar = words[currentWord][currentLetter];
-      const typedCurrentChar = typedWords[currentWord][currentLetter-1];
+      const typedCurrentChar = typedWords[currentWord][currentLetter - 1];
       if (isHangulChar(displayCurrentChar) && isHangulChar(typedCurrentChar)) {
         !isCorrect(
           displayCurrentChar + displayNextChar,
           typedCurrentChar,
           true
-        ) && setTypo((prev) => prev + 1);
+        ) && handleTypo();
       } else {
         !isCorrect(displayCurrentChar, typedCurrentChar, false) &&
-          setTypo((prev) => prev + 1);
+          handleTypo();
       }
-      handleTypo(typo);
     }
   }, [currentLetter]);
 
