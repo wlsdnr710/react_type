@@ -2,10 +2,11 @@
   position: absolute;
   top:0;
   right:0;
+  padding-right: 30px;
 }
 
 .typed {
   position:absolute;
   bottom: 0;
-  
+  padding-right: 20%;
 }

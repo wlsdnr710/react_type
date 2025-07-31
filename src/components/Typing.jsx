@@ -13,6 +13,7 @@ const Typing = () => {
   const [keyPressed, setKeyPressed] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [letterCount, setLetterCount] = useState(0);
+  const [typo, setTypo] = useState(0);
   const [cumulativeWordCount, setCumulativeWordCount] = useState(0);
   const [cumulativeKeyCount, setCumulativeKeyCount] = useState(0);
   const [isHangul, setIsHangul] = useState(false);
@@ -26,6 +27,10 @@ const Typing = () => {
   function handleFinishedSentence() {
     setCurrentSentence(Math.floor(Math.random() * 20));
     resetTyping();
+  }
+
+  function handleTypo(num) {
+    setTypo(num);
   }
 
   function resetTyping() {
@@ -48,6 +53,7 @@ const Typing = () => {
             // Reset Everything (cumulative as well )
             setCumulativeKeyCount(0);
             setCumulativeWordCount(0);
+            setTypo(0);
             break;
           //Enter 키 - 나중에 기능 추가 (다음 문장으로) (TODO)
           case "Enter":
@@ -152,6 +158,7 @@ const Typing = () => {
 
   // console.log(wordCount, letterCount);
   // console.log(keyPressed);
+  console.log(typo);
   const typedWords = keyPressed.split(" ");
 
   return (
@@ -162,6 +169,7 @@ const Typing = () => {
         isTyping={isTyping}
         keyCount={cumulativeKeyCount}
         wordCount={cumulativeWordCount}
+        typoCount={typo}
       />
       <ContentsDisplay
         currentSentence={currentSentence}
@@ -169,6 +177,7 @@ const Typing = () => {
         currentLetter={letterCount}
         typedWords={typedWords}
         handleFinishedSentence={handleFinishedSentence}
+        handleTypo={handleTypo}
       />
       <p className="typed">{keyPressed}</p>
     </div>

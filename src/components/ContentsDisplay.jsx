@@ -2,6 +2,7 @@ import { getSampleText } from "./temporaryText";
 import "./ContentsDisplay.css";
 import { isHangulChar } from "./translateHangul";
 import { disassemble } from "es-hangul";
+import { useEffect, useState } from "react";
 
 // 타이핑을 할 내용 (문장, 단어들등) 을 보여주는 컴포넌트.
 // TODO: 문장 여러개 추가하기 (temporaryText 대체)
@@ -13,8 +14,53 @@ const ContentsDisplay = ({
   currentLetter,
   typedWords,
   handleFinishedSentence,
+  handleTypo,
+  // handleTypoEdit, 
 }) => {
+  const [typo, setTypo] = useState(0);
+
+  function isCorrect(displayedWord, typedWord, isHangul) {
+    //한글 비교
+    if (isHangul) {
+      const typeDisassembled = disassemble(typedWord);
+      const sampleDisassembled = disassemble(displayedWord);
+      if (
+        sampleDisassembled.substring(0, typeDisassembled.length) ==
+        typeDisassembled
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+      // 한글 외에 다른 문자들교비교
+    } else if (displayedWord === typedWord) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   let words = getSampleText(currentSentence).split(" ");
+
+  useEffect(() => {
+    if (words&& words[currentWord]) {
+      const displayCurrentChar = words[currentWord][currentLetter-1];
+      const displayNextChar = words[currentWord][currentLetter];
+      const typedCurrentChar = typedWords[currentWord][currentLetter-1];
+      if (isHangulChar(displayCurrentChar) && isHangulChar(typedCurrentChar)) {
+        !isCorrect(
+          displayCurrentChar + displayNextChar,
+          typedCurrentChar,
+          true
+        ) && setTypo((prev) => prev + 1);
+      } else {
+        !isCorrect(displayCurrentChar, typedCurrentChar, false) &&
+          setTypo((prev) => prev + 1);
+      }
+      handleTypo(typo);
+    }
+  }, [currentLetter]);
+
   let processedText = words.map((word, wordIndex) => {
     let wordClass = "word";
     if (currentWord === wordIndex) {
@@ -32,32 +78,29 @@ const ContentsDisplay = ({
               wordIndex < currentWord ||
               (wordIndex == currentWord && letterIndex < currentLetter)
             ) {
-              //한글 비교
+              //한글 오타체크
               if (
                 wordIndex == currentWord &&
                 letterIndex == currentLetter - 1 && // 현재 입력중인 문자만 처리
                 isHangulChar(letter) &&
                 isHangulChar(typedWords[wordIndex][letterIndex])
               ) {
-                const typeDisassembled = disassemble(
-                  typedWords[wordIndex][letterIndex]
-                );
-                const sampleDisassembled = disassemble(
-                  letter + word[letterIndex + 1]
-                );
-                if (
-                  sampleDisassembled.substring(0, typeDisassembled.length) ==
-                  typeDisassembled
-                ) {
-                  letterClass += " correct";
-                } else {
-                  letterClass += " incorrect";
-                }
+                letterClass += isCorrect(
+                  letter + word[letterIndex + 1],
+                  typedWords[wordIndex][letterIndex],
+                  true
+                )
+                  ? " correct"
+                  : " incorrect";
                 // 한글 외에 다른 문자들교비교
-              } else if (letter === typedWords[wordIndex][letterIndex]) {
-                letterClass += " correct";
               } else {
-                letterClass += " incorrect";
+                letterClass += isCorrect(
+                  letter,
+                  typedWords[wordIndex][letterIndex],
+                  false
+                )
+                  ? " correct"
+                  : " incorrect";
               }
             }
             return (

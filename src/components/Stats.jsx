@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Stats.css";
 
-const Stats = ({ accuracy, isTyping, keyCount, wordCount }) => {
+const Stats = ({ isTyping, keyCount, wordCount, typoCount }) => {
   const [lastSession, setLastSession] = useState(0);
   const [startTime, setStartTime] = useState(new Date());
   const [time, setTime] = useState(0);
@@ -50,7 +50,14 @@ const Stats = ({ accuracy, isTyping, keyCount, wordCount }) => {
         {wordCount &&
           Math.round(wordCount / ((time + lastSession) / 600000)) / 10}
       </span>
-      <span className="stat">Accuracy: {accuracy}</span>
+      <span className="stat">
+        Accuracy:{" "}
+        {`${
+          keyCount
+            ? (Math.round(((keyCount - typoCount) / keyCount) * 1000) / 10).toFixed(1)
+            : 100.0
+        }%`}
+      </span>
       {/* Just for Reference : Will delete timer later */}
       <span className="stat">
         Timer : {time}/{lastSession}
