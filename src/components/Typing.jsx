@@ -158,7 +158,7 @@ const Typing = () => {
 
   // console.log(wordCount, letterCount);
   // console.log(keyPressed);
-  console.log(typo);
+  // console.log(typo);
   const typedWords = keyPressed.split(" ");
 
   return (
