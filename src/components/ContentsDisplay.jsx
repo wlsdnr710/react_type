@@ -2,13 +2,13 @@ import { getSampleText } from "./temporaryText";
 import "./ContentsDisplay.css";
 import { isHangulChar } from "./translateHangul";
 import { disassemble } from "es-hangul";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // 타이핑을 할 내용 (문장, 단어들등) 을 보여주는 컴포넌트.
 // TODO: 문장 여러개 추가하기 (temporaryText 대체)
 // Very far goal : Make backend/DB that lets people upload/select things to type.
 
-// Escape (지울때) 오타를 지우는지 여부 체크. 
+// Escape (지울때) 오타를 지우는지 여부 체크.
 const ContentsDisplay = ({
   currentSentence,
   currentWord,
@@ -16,7 +16,9 @@ const ContentsDisplay = ({
   typedWords,
   handleFinishedSentence,
   handleTypo,
+  handleDeleteTypo,
 }) => {
+  const [typoIndex, setTypoIndex] = useState([]);
 
   function isCorrect(displayedWord, typedWord, isHangul) {
     //한글 비교
@@ -38,23 +40,47 @@ const ContentsDisplay = ({
       return false;
     }
   }
-
   let words = getSampleText(currentSentence).split(" ");
 
   useEffect(() => {
+    //문장이 완전히 지워진 경우 (초기화)
+    if (!currentWord && !currentLetter) {
+      setTypoIndex([]);
+    }
     if (words && words[currentWord]) {
-      const displayCurrentChar = words[currentWord][currentLetter - 1];
-      const displayNextChar = words[currentWord][currentLetter];
-      const typedCurrentChar = typedWords[currentWord][currentLetter - 1];
-      if (isHangulChar(displayCurrentChar) && isHangulChar(typedCurrentChar)) {
-        !isCorrect(
-          displayCurrentChar + displayNextChar,
-          typedCurrentChar,
-          true
-        ) && handleTypo();
-      } else {
-        !isCorrect(displayCurrentChar, typedCurrentChar, false) &&
-          handleTypo();
+      // 오타를 지워 나간 경우
+      if (
+        typoIndex.length &&
+        typoIndex[typoIndex.length - 1][0] == currentWord &&
+        typoIndex[typoIndex.length - 1][1] >= currentLetter
+      ) {
+        setTypoIndex((prev) => prev.slice(0, -1));
+        handleDeleteTypo();
+      }
+      // 오타가 발생한 경우
+      else {
+        const displayCurrentChar = words[currentWord][currentLetter - 1];
+        const displayNextChar = words[currentWord][currentLetter];
+        const typedCurrentChar = typedWords[currentWord][currentLetter - 1];
+        //한글 오타
+        if (
+          isHangulChar(displayCurrentChar) &&
+          isHangulChar(typedCurrentChar)
+        ) {
+          !isCorrect(
+            displayCurrentChar + displayNextChar,
+            typedCurrentChar,
+            true
+          ) &&
+            handleTypo() &&
+            setTypoIndex((prev) => [...prev, [currentWord, currentLetter - 1]]);
+        }
+        //영어 or 기타 문자 오타
+        else {
+          !isCorrect(displayCurrentChar, typedCurrentChar, false) &&
+            handleTypo() &&
+            setTypoIndex((prev) => [...prev, [currentWord, currentLetter - 1]]);
+        }
       }
     }
   }, [currentLetter]);
@@ -66,6 +92,7 @@ const ContentsDisplay = ({
     }
     if (currentWord >= words.length) {
       handleFinishedSentence();
+      setTypoIndex([]);
     }
     return (
       <>

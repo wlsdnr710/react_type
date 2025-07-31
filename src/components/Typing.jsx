@@ -30,9 +30,13 @@ const Typing = () => {
   }
 
   function handleTypo() {
-    setTypo((prev)=>prev+1);
+    setTypo((prev) => prev + 1);
+    return true;
   }
 
+  function handleDeleteTypo() {
+    setTypo((prev) => prev - 1);
+  }
 
   function resetTyping() {
     setKeyPressed("");
@@ -178,6 +182,7 @@ const Typing = () => {
         typedWords={typedWords}
         handleFinishedSentence={handleFinishedSentence}
         handleTypo={handleTypo}
+        handleDeleteTypo={handleDeleteTypo}
       />
       <p className="typed">{keyPressed}</p>
     </div>
