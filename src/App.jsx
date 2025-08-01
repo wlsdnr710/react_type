@@ -32,9 +32,12 @@ function App() {
   return (
     <div style={{ "--accent-color": colors[themeColor] }}>
       <div className="header">
-        <Logo themeColor={colors[themeColor]} onClick={logoClickHandler} />
-        <h2>React Type</h2>
+        <div className="logo-title">
+          <Logo themeColor={colors[themeColor]} onClick={logoClickHandler} />
+          <h2>React Type</h2>
+        </div>
         <Selection
+          className="language"
           items={["한글", "영어"]}
           selectedItems={language}
           multiple={false}

@@ -2,6 +2,7 @@ import Button from "./Button";
 import "./Selection.css";
 
 const Selection = ({
+  className,
   items,
   selectedItems,
   multiple = true,
@@ -26,7 +27,7 @@ const Selection = ({
 
 
   return (
-    <div className="selection">
+    <div className={`${className} selection`}>
       {items.map((item, index) => {
         return (
           <Button

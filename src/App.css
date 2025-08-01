@@ -6,13 +6,19 @@
 }
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   position: absolute;
   top: 0;
   left: 0;
+  right: 0;
   padding: 1.5em; 
 }
 
 .header svg {
+  top: 0;
+  left: 0;
   display: inline-block;
   vertical-align: middle;
 }
@@ -22,4 +28,9 @@
   vertical-align: middle;
   margin-left: .5rem; 
   color: var(--accent-color);
+}
+
+.language {
+  display:block;
+  text-align: right;
 }

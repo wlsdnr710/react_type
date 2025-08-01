@@ -179,7 +179,6 @@ const Typing = ({ handleLanguageChange, isHangul }) => {
 
   return (
     <div>
-      {isHangul && <p className="language">한글입력중</p>}
       <Stats
         isTyping={isTyping}
         keyCount={cumulativeKeyCount}
