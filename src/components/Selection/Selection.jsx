@@ -1,24 +1,45 @@
 import Button from "./Button";
+import "./Selection.css";
 
-const Selection = ({ list }) => {
-  function handleSelection() {
-    //
+const Selection = ({
+  items,
+  selectedItems,
+  multiple = true,
+  handleSelectionChange,
+}) => {
+
+  function handleSelection(item) {
+    // when multiple selection allowed
+    if (multiple) {
+      if (selectedItems.includes(item)) {
+        handleSelectionChange([...selectedItems].filter((val)=>val!=item));
+      } else {
+        handleSelectionChange([...selectedItems, item])
+      }
+    }
+    // when only one selection is allowed
+    else {
+      handleSelectionChange([item])
+    }
   }
 
+
+
   return (
-    <>
-      {list.map((item, index) => {
+    <div className="selection">
+      {items.map((item, index) => {
         return (
           <Button
             first={index == 0}
-            last={index == list.length - 1}
+            last={index == items.length - 1}
+            selected={selectedItems.includes(item)}
             handleSelection={handleSelection}
           >
             {item}
           </Button>
         );
       })}
-    </>
+    </div>
   );
 };
 

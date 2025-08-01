@@ -57,7 +57,7 @@ const shiftHangul = {
 };
 
 const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-
+const english = /[a-z|A-Z]/;
 
 export function translateHangul(character, shiftKey) {
   const lowerChar = character.toLowerCase();
@@ -73,8 +73,10 @@ export function translateHangul(character, shiftKey) {
   return resultChar;
 }
 
-export function isHangulChar(string) {
-  return korean.test(string);
+export function isHangulChar(char) {
+  return korean.test(char);
 }
 
-
+export function isEnglishChar(char) {
+  return english.test(char);
+}

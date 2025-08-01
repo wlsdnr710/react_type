@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import ContentsDisplay from "./ContentsDisplay";
 import "./Typing.css";
-import { translateHangul, isHangulChar } from "./translateHangul";
+import {
+  translateHangul,
+  isHangulChar,
+  isEnglishChar,
+} from "./translateHangul";
 import { assemble, removeLastCharacter } from "es-hangul";
 import Stats from "./Stats";
 
@@ -9,20 +13,20 @@ import Stats from "./Stats";
 // TODO : 한글 처리 방법 생각하기 (Toss 한글 라이브러리 찾아보고 활용방법 생각하기)
 // TODO : 더 나은 저장 구조 생각해보기
 // TODO : Enter & Space 처리 방법 생각하기
-const Typing = () => {
-  const [keyPressed, setKeyPressed] = useState("");
-  const [wordCount, setWordCount] = useState(0);
-  const [letterCount, setLetterCount] = useState(0);
-  const [typo, setTypo] = useState(0);
-  const [cumulativeWordCount, setCumulativeWordCount] = useState(0);
-  const [cumulativeKeyCount, setCumulativeKeyCount] = useState(0);
-  const [isHangul, setIsHangul] = useState(false);
-  const [hangulDelete, setHangulDelete] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
+const Typing = ({ handleLanguageChange, isHangul }) => {
+  const [keyPressed, setKeyPressed] = useState(""); // 현재 타이핑된 문장
+  const [wordCount, setWordCount] = useState(0); // 현재 타이핑된 단어 갯수
+  const [letterCount, setLetterCount] = useState(0); // 현재 단어중 타이핑된 문자 갯수
+  const [typo, setTypo] = useState(0); // 오타 갯수
+  const [cumulativeWordCount, setCumulativeWordCount] = useState(0); // 그동안 타이핑 한 모든 문자 갯수
+  const [cumulativeKeyCount, setCumulativeKeyCount] = useState(0); // 그동안 타이핑한 모든 키 횟수
+  const [hangulDelete, setHangulDelete] = useState(false); // 한글을 지우는 중인지 확인 (타이핑 중인 한글 지울 때 사용)
+  const [isTyping, setIsTyping] = useState(false); // 타이핑 중 (타자 속도 측정용 타이머 발동에 사용)
+  const [hangulInputExist, setHangulInputExist] = useState(false); // 한글 입력이 존재하는지 체크 (맥 or Input field 인풋 처리용)
   const [currentSentence, setCurrentSentence] = useState(
+    // 타이핑 할 문장
     Math.floor(Math.random() * 20)
   );
-  // const [hangulBuffer, setHangulBuffer] = useState([]);
 
   function handleFinishedSentence() {
     setCurrentSentence(Math.floor(Math.random() * 20));
@@ -50,7 +54,11 @@ const Typing = () => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (isHangulChar(event.key)) {
-        setIsHangul(true);
+        handleLanguageChange(["한글"]);
+        setHangulInputExist(true);
+      }
+      if (hangulInputExist && isEnglishChar) {
+        handleLanguageChange(["영어"]);
       }
       // 특수키
       if (event.key.length > 1) {
@@ -115,7 +123,7 @@ const Typing = () => {
           // 한/영 - 한글/영어 입력모드 전환
           // eslint-disable-next-line no-fallthrough
           case "HangulMode":
-            setIsHangul((prev) => !prev);
+            handleLanguageChange([isHangul ? "영어" : "한글"]);
             break;
           default:
         }

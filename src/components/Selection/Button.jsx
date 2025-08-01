@@ -1,8 +1,14 @@
-
-const Button = ({ first = false, last = false, handleSelection, children }) => {
+const Button = ({
+  first = false,
+  last = false,
+  selected,
+  handleSelection,
+  children,
+}) => {
   let className = first ? "first" : last ? "last" : "middle";
+  className += selected ? " selected" : "";
   return (
-    <button className={className} onClick={handleSelection}>
+    <button className={className} onClick={() => handleSelection(children)}>
       {children}
     </button>
   );

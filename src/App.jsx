@@ -7,6 +7,7 @@ import Selection from "./components/Selection/Selection.jsx";
 function App() {
   //TODO: Create module later that will change themeColor with these
   const [themeColor, setThemeColor] = useState(0);
+  const [language, setLanguage] = useState(["영어"]);
   const colors = [
     "#3498db",
     "#2ecc71",
@@ -20,14 +21,30 @@ function App() {
     setThemeColor((prev) => (prev + 1) % 6);
   }
 
+  function buttonLangaugeChange(selected) {
+    setLanguage(selected);
+  }
+
+  function keyboardLangaugeChange(selected) {
+    setLanguage(selected);
+  }
+
   return (
-    <div style={{'--accent-color': colors[themeColor]}}>
+    <div style={{ "--accent-color": colors[themeColor] }}>
       <div className="header">
         <Logo themeColor={colors[themeColor]} onClick={logoClickHandler} />
         <h2>React Type</h2>
-        {/* <Selection list={["한글","영어"]} /> */}
+        <Selection
+          items={["한글", "영어"]}
+          selectedItems={language}
+          multiple={false}
+          handleSelectionChange={buttonLangaugeChange}
+        />
       </div>
-      <Typing />
+      <Typing
+        handleLanguageChange={keyboardLangaugeChange}
+        isHangul={language[0] == "한글"}
+      />
     </div>
   );
 }
