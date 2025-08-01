@@ -1,6 +1,6 @@
 .contentDisplay{
   display: block;
-  border-color:black;
+  border-color: var(--text-color);
 }
 
 .word {
@@ -9,14 +9,14 @@
 }
 
 .currentWord {
-  background-color: lightblue;
+  background-color: var(--accent-color);
 }
 
 
 .letter.correct {
-  color: blue;
+  color: var(--primary-color);
 }
 
 .letter.incorrect {
-  color: red;
+  color: var(--error-color);
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Typing from "./components/Typing";
 import "./App.css";
 import Logo from "./assets/Logo.jsx";
+import Selection from "./components/Selection/Selection.jsx";
 
 function App() {
   //TODO: Create module later that will change themeColor with these
@@ -20,13 +21,14 @@ function App() {
   }
 
   return (
-    <>
+    <div style={{'--accent-color': colors[themeColor]}}>
       <div className="header">
         <Logo themeColor={colors[themeColor]} onClick={logoClickHandler} />
-        <h2 style={{ color: colors[themeColor] }}>React Type</h2>
+        <h2>React Type</h2>
+        {/* <Selection list={["한글","영어"]} /> */}
       </div>
       <Typing />
-    </>
+    </div>
   );
 }
 

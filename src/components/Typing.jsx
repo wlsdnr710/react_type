@@ -49,6 +49,9 @@ const Typing = () => {
    */
   useEffect(() => {
     const handleKeyDown = (event) => {
+      if (isHangulChar(event.key)) {
+        setIsHangul(true);
+      }
       // 특수키
       if (event.key.length > 1) {
         switch (event.key) {
