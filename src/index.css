@@ -44,11 +44,24 @@ h1 {
     --text-color: #213547;
     --accent-color: #747bff;
     --error-color: #ff0000;
+    --button-background: #f9f9f9;
   }
   a:hover {
     color: var(--secondary-color);
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #00ff00;
+    --secondary-color: #535bf2;
+    --background-color: #000000;
+    --text-color: #f9f9f9;
+    --accent-color: #747bff;
+    --error-color: #ff0000;
+    --button-background: #213547;
+  }
+  a:hover {
+    color: var(--secondary-color);
   }
 }

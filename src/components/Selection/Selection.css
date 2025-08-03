@@ -4,9 +4,10 @@
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #f9f9f9;
+  background-color: var(--button-background);
   cursor: pointer;
   transition: border-color 0.25s;
+  color:var(--text-color);
 }
 
 .selection button.first {
@@ -21,7 +22,7 @@
 
 .selection button.selected {
   background-color: var(--accent-color);
-  color: white;
+  color: var(--background-color);
 }
 
 .selection button:hover {
