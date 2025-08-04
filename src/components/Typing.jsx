@@ -20,6 +20,7 @@ const Typing = ({ handleLanguageChange, isHangul }) => {
   const [typo, setTypo] = useState(0); // 오타 갯수
   const [cumulativeWordCount, setCumulativeWordCount] = useState(0); // 그동안 타이핑 한 모든 문자 갯수
   const [cumulativeKeyCount, setCumulativeKeyCount] = useState(0); // 그동안 타이핑한 모든 키 횟수
+  const [finishedSentence, setFinishedSentence] = useState(0); //그동안 타이핑한 문장
   const [hangulDelete, setHangulDelete] = useState(false); // 한글을 지우는 중인지 확인 (타이핑 중인 한글 지울 때 사용)
   const [isTyping, setIsTyping] = useState(false); // 타이핑 중 (타자 속도 측정용 타이머 발동에 사용)
   const [hangulInputExist, setHangulInputExist] = useState(false); // 한글 입력이 존재하는지 체크 (맥 or Input field 인풋 처리용)
@@ -30,6 +31,7 @@ const Typing = ({ handleLanguageChange, isHangul }) => {
 
   function handleFinishedSentence() {
     setCurrentSentence(Math.floor(Math.random() * 20));
+    setFinishedSentence((prev) => prev + 1);
     resetTyping();
   }
 
@@ -69,6 +71,7 @@ const Typing = ({ handleLanguageChange, isHangul }) => {
             // Reset Everything (cumulative as well )
             setCumulativeKeyCount(0);
             setCumulativeWordCount(0);
+            setFinishedSentence(0);
             setTypo(0);
             break;
           //Enter 키 - 나중에 기능 추가 (다음 문장으로) (TODO)
@@ -184,6 +187,7 @@ const Typing = ({ handleLanguageChange, isHangul }) => {
         keyCount={cumulativeKeyCount}
         wordCount={cumulativeWordCount}
         typoCount={typo}
+        sentence={finishedSentence}
       />
       <ContentsDisplay
         currentSentence={currentSentence}

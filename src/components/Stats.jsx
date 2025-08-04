@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Stats.css";
 
-const Stats = ({ isTyping, keyCount, wordCount, typoCount }) => {
+const Stats = ({ isTyping, keyCount, wordCount, typoCount, sentence }) => {
   const [lastSession, setLastSession] = useState(0);
   const [startTime, setStartTime] = useState(new Date());
   const [time, setTime] = useState(0);
@@ -30,7 +30,7 @@ const Stats = ({ isTyping, keyCount, wordCount, typoCount }) => {
       }
       const timer = setInterval(() => {
         setTime(Math.floor(new Date() - startTime));
-      }, 100);
+      }, 50);
 
       return () => {
         clearInterval(timer);
@@ -54,14 +54,16 @@ const Stats = ({ isTyping, keyCount, wordCount, typoCount }) => {
         Accuracy:{" "}
         {`${
           keyCount
-            ? (Math.round(((keyCount - typoCount) / keyCount) * 10000) / 100).toFixed(1)
+            ? (
+                Math.round(((keyCount - typoCount) / keyCount) * 10000) / 100
+              ).toFixed(1)
             : "100.0"
         }%`}
       </span>
-      {/* Just for Reference : Will delete timer later */}
       <span className="stat">
-        Timer : {time}/{lastSession}
+        Timer : {((time + lastSession) / 1000).toFixed(1)} sec
       </span>
+      {/* <span className="stat">Sentence : {`${sentence}/10`}</span> */}
     </p>
   );
 };
