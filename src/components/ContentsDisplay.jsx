@@ -88,9 +88,9 @@ const ContentsDisplay = ({
       handleFinishedSentence();
       setTypoIndex([]);
     }
-  }, [currentLetter]);
+  }, [currentLetter, currentWord]);
 
-  //컨텐츠 컴포넌트 생성 
+  //컨텐츠 컴포넌트 생성
   let processedText = words.map((word, wordIndex) => {
     let wordClass = "word";
     // 현재 문장 강조 표시용 클래스

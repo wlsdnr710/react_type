@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ContentsDisplay from "./ContentsDisplay";
 import "./Typing.css";
 import {
@@ -8,6 +8,7 @@ import {
 } from "./translateHangul";
 import { assemble, removeLastCharacter } from "es-hangul";
 import Stats from "./Stats";
+import ResultModal from "./ResultModal";
 
 // 유저가 타이핑 한 내용을 처리하는 컴포넌트 (개발에 따라 컴포넌트화 하지 않고 아예 안보이게 할 수도 있음.)
 // TODO : 한글 처리 방법 생각하기 (Toss 한글 라이브러리 찾아보고 활용방법 생각하기)
@@ -28,11 +29,24 @@ const Typing = ({ handleLanguageChange, isHangul }) => {
     // 타이핑 할 문장
     Math.floor(Math.random() * 20)
   );
+  const resultRef = useRef();
 
-  console.log(finishedSentence);
+  const goal = 10;
+
+  const closeResult = () => {
+    resultRef.current.close();
+    setFinishedSentence(0);
+    setCumulativeKeyCount(0);
+    setCumulativeWordCount(0);
+    setTypo(0);
+  };
+
   const handleFinishedSentence = () => {
-    setCurrentSentence(Math.floor(Math.random() * 20));
+    if (finishedSentence == goal - 1) {
+      resultRef.current.show();
+    }
     setFinishedSentence((prev) => prev + 1);
+    setCurrentSentence(Math.floor(Math.random() * 20));
     resetTyping();
   };
 
@@ -199,6 +213,7 @@ const Typing = ({ handleLanguageChange, isHangul }) => {
         handleTypo={handleTypo}
         handleDeleteTypo={handleDeleteTypo}
       />
+      <ResultModal ref={resultRef} close={closeResult} />
       <p className="typed">{keyPressed}</p>
     </div>
   );
