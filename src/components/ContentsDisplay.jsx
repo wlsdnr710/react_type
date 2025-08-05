@@ -83,22 +83,26 @@ const ContentsDisplay = ({
         }
       }
     }
-  }, [currentLetter]);
-
-  let processedText = words.map((word, wordIndex) => {
-    let wordClass = "word";
-    if (currentWord === wordIndex) {
-      wordClass += " currentWord";
-    }
+    //현재 문장 끝남. 초기화
     if (currentWord >= words.length) {
       handleFinishedSentence();
       setTypoIndex([]);
+    }
+  }, [currentLetter]);
+
+  //컨텐츠 컴포넌트 생성 
+  let processedText = words.map((word, wordIndex) => {
+    let wordClass = "word";
+    // 현재 문장 강조 표시용 클래스
+    if (currentWord === wordIndex) {
+      wordClass += " currentWord";
     }
     return (
       <>
         <span className={wordClass} key={wordIndex}>
           {word.split("").map((letter, letterIndex) => {
             let letterClass = "letter";
+            // 타이핑한 글자들 오타여부 확인
             if (
               wordIndex < currentWord ||
               (wordIndex == currentWord && letterIndex < currentLetter)

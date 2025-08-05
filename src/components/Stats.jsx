@@ -63,7 +63,7 @@ const Stats = ({ isTyping, keyCount, wordCount, typoCount, sentence }) => {
       <span className="stat">
         Timer : {((time + lastSession) / 1000).toFixed(1)} sec
       </span>
-      {/* <span className="stat">Sentence : {`${sentence}/10`}</span> */}
+      <span className="stat">Sentence : {`${sentence}/10`}</span>
     </p>
   );
 };

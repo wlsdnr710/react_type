@@ -29,20 +29,21 @@ const Typing = ({ handleLanguageChange, isHangul }) => {
     Math.floor(Math.random() * 20)
   );
 
-  function handleFinishedSentence() {
+  console.log(finishedSentence);
+  const handleFinishedSentence = () => {
     setCurrentSentence(Math.floor(Math.random() * 20));
     setFinishedSentence((prev) => prev + 1);
     resetTyping();
-  }
+  };
 
-  function handleTypo() {
+  const handleTypo = () => {
     setTypo((prev) => prev + 1);
     return true;
-  }
+  };
 
-  function handleDeleteTypo() {
+  const handleDeleteTypo = () => {
     setTypo((prev) => prev - 1);
-  }
+  };
 
   function resetTyping() {
     setKeyPressed("");
