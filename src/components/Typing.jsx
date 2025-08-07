@@ -214,7 +214,7 @@ const Typing = ({ handleLanguageChange, isHangul }) => {
         handleDeleteTypo={handleDeleteTypo}
       />
       <ResultModal ref={resultRef} close={closeResult} />
-      <p className="typed">{keyPressed}</p>
+      <div className="typed">{keyPressed}</div>
     </div>
   );
 };

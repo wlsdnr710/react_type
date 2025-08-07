@@ -1,6 +1,8 @@
 .contentDisplay{
   display: block;
   border-color: var(--text-color);
+  text-align: left;
+  font-size: 15px;
 }
 
 .word {

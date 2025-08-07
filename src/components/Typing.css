@@ -1,6 +1,8 @@
 
 .typed {
-  position:absolute;
+  /* position:absolute;
   bottom: 0;
-  padding-right: 20%;
+  padding-right: 20%; */
+  text-align:left;
+  font-size: 17.65px;
 }
