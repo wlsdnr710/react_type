@@ -20,3 +20,19 @@
 .letter.incorrect {
   color: var(--error-color);
 }
+
+progress {
+  height: 2px;
+  width:100%;
+  margin: 10px;
+  appearance: none;
+}
+
+progress::-webkit-progress-bar {
+  
+  background: var(--button-background);
+}
+
+progress::-webkit-progress-value {
+  background: var(--accent-color);
+}

@@ -40,7 +40,8 @@ const ContentsDisplay = ({
       return false;
     }
   }
-  let words = getSampleText(currentSentence).split(" ");
+  const currentSentenceString = getSampleText(currentSentence)
+  let words = currentSentenceString.split(" ");
 
   useEffect(() => {
     //문장이 완전히 지워진 경우 (초기화)
@@ -149,7 +150,12 @@ const ContentsDisplay = ({
     );
   });
 
-  return <div className="contentDisplay">{processedText}</div>;
+  return (
+    <div className="contentDisplay">
+      <progress value={typedWords.join(" ").length} max={currentSentenceString.length}/><br></br>
+      {processedText}
+    </div>
+  );
 };
 
 export default ContentsDisplay;
