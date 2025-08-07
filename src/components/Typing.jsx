@@ -196,7 +196,7 @@ const Typing = ({ handleLanguageChange, isHangul }) => {
   const typedWords = keyPressed.split(" ");
 
   return (
-    <div>
+    <div className="typingDisplay">
       <Stats
         isTyping={isTyping}
         keyCount={cumulativeKeyCount}
