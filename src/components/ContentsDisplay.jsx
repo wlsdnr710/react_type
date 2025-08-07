@@ -40,7 +40,7 @@ const ContentsDisplay = ({
       return false;
     }
   }
-  const currentSentenceString = getSampleText(currentSentence)
+  const currentSentenceString = getSampleText(currentSentence);
   let words = currentSentenceString.split(" ");
 
   useEffect(() => {
@@ -73,14 +73,32 @@ const ContentsDisplay = ({
             typedCurrentChar,
             true
           ) &&
+            !(
+              // checking last typo isn't duplicate
+              (
+                typoIndex.splice(0, -1)[0] == currentWord &&
+                typoIndex.splice(0, -1)[1] == currentLetter
+              )
+            ) &&
             handleTypo() &&
-            setTypoIndex((prev) => [...prev, [currentWord, currentLetter - 1]]);
+            setTypoIndex((prev) => {
+              return [...prev, [currentWord, currentLetter - 1]];
+            });
         }
         //영어 or 기타 문자 오타
         else {
           !isCorrect(displayCurrentChar, typedCurrentChar, false) &&
+            !(
+              // checking last typo isn't duplicate
+              (
+                typoIndex.splice(0, -1)[0] == currentWord &&
+                typoIndex.splice(0, -1)[1] == currentLetter
+              )
+            ) &&
             handleTypo() &&
-            setTypoIndex((prev) => [...prev, [currentWord, currentLetter - 1]]);
+            setTypoIndex((prev) => {
+              return [...prev, [currentWord, currentLetter - 1]];
+            });
         }
       }
     }
@@ -152,7 +170,11 @@ const ContentsDisplay = ({
 
   return (
     <div className="contentDisplay">
-      <progress value={typedWords.join(" ").length} max={currentSentenceString.length}/><br></br>
+      <progress
+        value={typedWords.join(" ").length}
+        max={currentSentenceString.length}
+      />
+      <br></br>
       {processedText}
     </div>
   );
